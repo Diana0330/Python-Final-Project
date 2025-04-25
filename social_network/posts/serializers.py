@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from social_network.posts.models import Post, Comment
+from .models import Post, Comment, Like
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -9,12 +9,25 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PostSerializer(serializers.ModelSerializer): # PostComment Serializer
+class PostSerializer(serializers.ModelSerializer):  # PostComment Serializer
     comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'user', 'created_at', 'image', 'comment']
+        fields = ['id', 'title', 'description', 'user', 'location', 'created_at', 'image', 'comments']
 
 
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = '__all__'
 
+
+class CreatePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['title', 'description', 'location', 'image']
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super(CreatePostSerializer, self).create(validated_data)
