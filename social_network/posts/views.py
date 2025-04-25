@@ -26,40 +26,53 @@ class PostCreateView(generics.CreateAPIView):
 class PostDetailsUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
 # to create a new like
-class CreateLikeView(generics.CreateAPIView):  # one user can make many likes, before doing a post - is there a like for a certain post
+class CreateLikeView(
+    generics.CreateAPIView):  # one user can make many likes, before doing a post - is there a like for a certain post
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    #permission_classes = [IsAuthenticated]
-    # def post
+    permission_classes = [IsAuthenticated]
+
+    # def post/create method or composite primary key???
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 #to delete a like:
 class DeleteLikeView(generics.DestroyAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
 
 #Комментарии могут быть написаны к определённой публикации, оставлять их могут только авторизованные пользователи.
 # Сам комментарий состоит из текста и даты его публикации.
 class CreateCommentView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class UpdateCommentView(generics.UpdateAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'pk'
     serializer_class = CommentSerializer
-
+    permission_classes = [IsOwnerOrReadOnly]
 
 class CommentRetrieveView(generics.RetrieveAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'pk'
     serializer_class = CommentSerializer
-
+    permission_classes = [IsAuthenticated]
 
 class CommentDeleteView(DestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
