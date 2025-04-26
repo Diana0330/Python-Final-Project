@@ -9,9 +9,9 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['user']
 
+
 class PostSerializer(serializers.ModelSerializer):  # PostComment Serializer
     comments = CommentSerializer(many=True, read_only=True)
-
 
     class Meta:
         model = Post
@@ -24,6 +24,7 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['user']
 
+
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -33,5 +34,7 @@ class CreatePostSerializer(serializers.ModelSerializer):
         validated_data['user'] = self.context['request'].user
         return super(CreatePostSerializer, self).create(validated_data)
 
-
-
+# class PostDetailsSerializer(serializers.Serializer):
+#     post =
+#     comment_descrbtion = serializers.CharField()
+#     total_likes =
