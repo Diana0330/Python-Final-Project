@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from .models import Post, Like, Comment
 from .permissions import IsOwnerOrReadOnly
-from .serializers import PostSerializer, LikeSerializer, CommentSerializer, CreatePostSerializer
+from .serializers import PostSerializer, LikeSerializer, CommentSerializer, CreatePostSerializer, PostDetailsSerializer
 
 
 # Create your views here.
@@ -88,10 +88,11 @@ class CommentDeleteView(DestroyAPIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
-# def post_details_view(request):
-#         all_posts = Post.objects.all()
-#         all_comments = Comment.objects.all()
-#         likes_count = Like.object.count()
-#         serializer = ProductDrtailsSerializer(all_products, many=True)
-#         return Response(serializer.data)
+class PostDetailsView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostDetailsSerializer
+    permission_classes = [IsAuthenticated]
+
+# https://testdriven.io/blog/drf-serializers/
+
 

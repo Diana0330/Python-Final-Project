@@ -11,11 +11,11 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):  # PostComment Serializer
-    comments = CommentSerializer(many=True, read_only=True)
+    #comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'user', 'location', 'created_at', 'image', 'comments']
+        fields = ['id', 'title', 'description', 'user', 'location', 'created_at', 'image']
 
 
 class LikeSerializer(serializers.ModelSerializer):
@@ -34,7 +34,27 @@ class CreatePostSerializer(serializers.ModelSerializer):
         validated_data['user'] = self.context['request'].user
         return super(CreatePostSerializer, self).create(validated_data)
 
-# class PostDetailsSerializer(serializers.Serializer):
-#     post =
-#     comment_descrbtion = serializers.CharField()
-#     total_likes =
+
+class CommentDetailsSerializer(serializers.ModelSerializer):
+    text = serializers.CharField(source='description')
+    author = serializers.IntegerField(source='user.id')
+
+    class Meta:
+        model = Comment
+        fields = ['author', 'text', 'created_at']
+
+
+class PostDetailsSerializer(serializers.ModelSerializer):
+    comments = CommentDetailsSerializer(many=True, read_only=True)
+    likes_count = serializers.SerializerMethodField('get_total_likes')
+    text = serializers.CharField(source='title')
+
+
+    class Meta:
+        model = Post
+        fields = ['id', 'text', 'image', 'created_at', 'comments', 'likes_count']
+        read_only_fields = ['likes_count']
+
+    def get_total_likes(self, obj):
+        likes_count = obj.like.count()
+        return likes_count
