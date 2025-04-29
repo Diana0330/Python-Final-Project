@@ -49,7 +49,6 @@ class PostDetailsSerializer(serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField('get_total_likes')
     text = serializers.CharField(source='title')
 
-
     class Meta:
         model = Post
         fields = ['id', 'text', 'image', 'created_at', 'comments', 'likes_count']

@@ -10,12 +10,8 @@ from .serializers import PostSerializer, LikeSerializer, CommentSerializer, Crea
 
 
 # Create your views here.
-#Публикации могут создаваться только авторизованными пользователями,
-# редактировать же публикацию может только её автор.
 
-
-# to create a new post and to retrieve all posts
-
+# to create a new post
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = CreatePostSerializer
@@ -30,8 +26,7 @@ class PostDetailsUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # to create a new like
-class CreateLikeView(
-    generics.CreateAPIView):  # one user can make many likes, before doing a post - is there a like for a certain post
+class CreateLikeView(generics.CreateAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
     permission_classes = [IsAuthenticated]
@@ -57,8 +52,7 @@ class DeleteLikeView(generics.DestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
 
-#Комментарии могут быть написаны к определённой публикации, оставлять их могут только авторизованные пользователи.
-# Сам комментарий состоит из текста и даты его публикации.
+#to create a comment
 class CreateCommentView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -68,6 +62,7 @@ class CreateCommentView(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 
+#to update a comment
 class UpdateCommentView(generics.UpdateAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'pk'
@@ -75,6 +70,7 @@ class UpdateCommentView(generics.UpdateAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
 
+#to get a comment by its id
 class CommentRetrieveView(generics.RetrieveAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'pk'
@@ -82,17 +78,15 @@ class CommentRetrieveView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
 
+#to delete a comment
 class CommentDeleteView(DestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
+# final request
 class PostDetailsView(generics.RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailsSerializer
     permission_classes = [IsAuthenticated]
-
-# https://testdriven.io/blog/drf-serializers/
-
-

@@ -19,16 +19,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-#from social_network.posts.views import PostListCreateView, PostDetailsUpdateDeleteView, CreateLikeView, DeleteLikeView
 
 urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('', include('posts.urls')),
-    #path('posts/', PostListCreateView.as_view()),
-    #path('posts/<int:post_id>/', PostDetailsUpdateDeleteView.as_view()),
-    #path('likes/create/', CreateLikeView.as_view()),
-    #path('likes/delete/', DeleteLikeView.as_view()),
 
 ]
 
@@ -37,5 +32,3 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-# path("api/v1/phones/", PhoneListCreateView.as_view()),
-# path("api/v1/phones/<int:phone_id>/", PhoneDetailsUpdateDeleteView.as_view())
