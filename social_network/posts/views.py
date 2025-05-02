@@ -45,14 +45,14 @@ class CreateLikeView(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-#to delete a like:
+# to delete a like:
 class DeleteLikeView(generics.DestroyAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
 
-#to create a comment
+# to create a comment
 class CreateCommentView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -62,7 +62,7 @@ class CreateCommentView(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-#to update a comment
+# to update a comment
 class UpdateCommentView(generics.UpdateAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'pk'
@@ -70,7 +70,7 @@ class UpdateCommentView(generics.UpdateAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
 
-#to get a comment by its id
+# to get a comment by its id
 class CommentRetrieveView(generics.RetrieveAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'pk'
@@ -78,7 +78,7 @@ class CommentRetrieveView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
 
-#to delete a comment
+# to delete a comment
 class CommentDeleteView(DestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
