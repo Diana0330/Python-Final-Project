@@ -31,4 +31,4 @@ def test_create_post_authorized_user(api_client, user_obj):
             "location": "Europe"}
     response = api_client.post('/posts/create/', data)
     assert response.status_code == status.HTTP_201_CREATED
-    # api_client.get(posts/<int:pk>/)
+   
